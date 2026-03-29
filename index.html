@@ -3,141 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>The Hall of Shame</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #050505; color: #eee; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #050505; color: #eee; font-family: sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .glass:hover { border-color: #dc2626; transform: translateY(-4px); box-shadow: 0 10px 30px -10px rgba(220, 38, 38, 0.3); }
-        iframe, video, img { border-radius: 8px; width: 100%; height: 200px; object-fit: cover; }
+        .glass:hover { border-color: #dc2626; transform: translateY(-4px); }
+        .filter-btn { transition: 0.2s; border: 1px solid rgba(255,255,255,0.1); }
+        .filter-btn.active { background-color: #dc2626; border-color: #dc2626; color: white; }
+        .video-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; }
     </style>
 </head>
 <body class="p-6 md:p-12">
 
-    <header class="text-center mb-16">
-        <h1 class="text-7xl font-black tracking-tighter text-red-600 uppercase italic">Hall of Shame</h1>
-        <p class="text-zinc-500 mt-4 tracking-widest uppercase text-sm">The Archives of Eternal Regret</p>
+    <header class="text-center mb-10">
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-red-600 uppercase italic">Hall of Shame</h1>
+        <p class="text-zinc-500 mt-4 tracking-widest uppercase text-xs">The Official Archive</p>
     </header>
 
-    <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        </div>
+    <div class="flex flex-wrap justify-center gap-3 mb-12">
+        <button onclick="filterGallery('All')" class="filter-btn active px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest">All</button>
+        <button onclick="filterGallery('Tech Fail')" class="filter-btn px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest">Tech Fails</button>
+        <button onclick="filterGallery('Design')" class="filter-btn px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest">Design</button>
+        <button onclick="filterGallery('Cursed')" class="filter-btn px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest">Cursed</button>
+    </div>
 
-    <hr class="my-20 border-zinc-800">
+    <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
 
-    <section class="max-w-2xl mx-auto bg-zinc-900 p-8 rounded-2xl border border-zinc-700">
-        <h2 class="text-2xl font-bold mb-4 text-red-500">Admin: Generate New Entry</h2>
+    <section class="max-w-2xl mx-auto bg-zinc-900 p-8 rounded-2xl border border-zinc-700 mt-24">
+        <h2 class="text-xl font-bold mb-4 text-red-500 uppercase tracking-tighter">Admin: New Entry</h2>
         <div class="space-y-4">
-            <input id="admin-name" type="text" placeholder="Entry Name" class="w-full bg-black p-3 rounded border border-zinc-700">
-            <input id="admin-url" type="text" placeholder="URL (Image, Video, or YouTube Link)" class="w-full bg-black p-3 rounded border border-zinc-700">
+            <input id="admin-name" type="text" placeholder="Entry Name" class="w-full bg-black p-3 rounded border border-zinc-700 text-white">
+            <input id="admin-url" type="text" placeholder="YouTube Link or Filename (e.g. fail.mp4)" class="w-full bg-black p-3 rounded border border-zinc-700 text-white">
             <select id="admin-cat" class="w-full bg-black p-3 rounded border border-zinc-700 text-zinc-400">
                 <option value="Tech Fail">Tech Fail</option>
-                <option value="Design">Bad Design</option>
-                <option value="Cursed">Cursed Media</option>
+                <option value="Design">Design</option>
+                <option value="Cursed">Cursed</option>
             </select>
-            <textarea id="admin-desc" placeholder="Brief Description" class="w-full bg-black p-3 rounded border border-zinc-700"></textarea>
-            <button onclick="generateNewEntry()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition">Generate Entry Code</button>
+            <textarea id="admin-desc" placeholder="Description" class="w-full bg-black p-3 rounded border border-zinc-700 text-white"></textarea>
+            <button onclick="generateNewEntry()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition uppercase tracking-widest text-sm">Generate Code</button>
         </div>
-        
         <div id="output-area" class="mt-6 hidden">
-            <p class="text-xs text-zinc-500 mb-2 uppercase font-bold">Copy this line and paste it into the "shameData" list in your code:</p>
+            <p class="text-[10px] text-zinc-500 mb-2 uppercase">Copy/Paste this into 'shameData' in your code:</p>
             <code id="code-output" class="block bg-black p-4 text-green-400 text-xs break-all rounded border border-green-900/30"></code>
         </div>
     </section>
 
-    <section class="max-w-2xl mx-auto bg-zinc-900 p-8 rounded-2xl border border-zinc-700">
-        <h2 class="text-2xl font-bold mb-4 text-red-500">Admin: Generate New Entry</h2>
-        <div class="space-y-4">
-            <input id="admin-name" type="text" placeholder="Entry Name" class="w-full bg-black p-3 rounded border border-zinc-700">
-            
-            <div class="grid grid-cols-2 gap-4">
-                <input id="admin-url" type="text" placeholder="Paste URL (YouTube/Direct Link)" class="bg-black p-3 rounded border border-zinc-700">
-                <div class="relative">
-                    <label class="block text-xs text-zinc-500 mb-1">Or select local file:</label>
-                    <input id="admin-file" type="file" accept="video/*,image/*" class="text-xs text-zinc-400">
-                </div>
-            </div>
-
-            <select id="admin-cat" class="w-full bg-black p-3 rounded border border-zinc-700 text-zinc-400">
-                <option value="Tech Fail">Tech Fail</option>
-                <option value="Design">Bad Design</option>
-                <option value="Cursed">Cursed Media</option>
-                <option value="Self-Hosted">Self-Hosted Video</option>
-            </select>
-            <textarea id="admin-desc" placeholder="Brief Description" class="w-full bg-black p-3 rounded border border-zinc-700"></textarea>
-            <button onclick="generateNewEntry()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition">Generate Entry Code</button>
-        </div>
-        
-        <div id="output-area" class="mt-6 hidden text-center">
-            <p class="text-xs text-zinc-500 mb-2 uppercase font-bold">Copy this line into your 'shameData' list:</p>
-            <code id="code-output" class="block bg-black p-4 text-green-400 text-xs break-all rounded border border-green-900/30 text-left"></code>
-            <p class="text-[10px] text-yellow-500 mt-2">⚠️ Note: If using a local file, ensure the video is in the same folder as this HTML file!</p>
-        </div>
-    </section>
-
     <script>
-        // --- DATA SECTION: PASTE NEW ENTRIES HERE ---
+        // --- 1. YOUR DATA ---
         const shameData = [
-            { name: "info overload", url: "https://youtu.be/OiThl8E99TA", cat: "cursed", desc: "idk what happend" },
-            
-            
+            { name: "CyberTruck Window", url: "https://www.youtube.com/watch?v=m7atGkba-Z8", cat: "Tech Fail", desc: "Unbreakable? Not quite." },
+            { name: "Sample Design Fail", url: "https://images.unsplash.com/photo-1590013330462-094d40999086?w=600", cat: "Design", desc: "A masterpiece of bad choices." },
+            { name: "Cursed Video", url: "video.mp4", cat: "Cursed", desc: "A local file test." }
         ];
 
-        function renderGallery() {
+        // --- 2. RENDER LOGIC ---
+        function renderGallery(filter = 'All') {
             const gallery = document.getElementById('gallery');
-            gallery.innerHTML = shameData.map(item => {
+            const filteredData = filter === 'All' ? shameData : shameData.filter(item => item.cat === filter);
+            
+            gallery.innerHTML = filteredData.map((item, index) => {
                 let mediaHtml = '';
                 const url = item.url;
 
-                // 1. Youtube Detection
                 if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                    let id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-                    mediaHtml = `<iframe src="https://www.youtube.com/embed/${id}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>`;
-                } 
-                // 2. Direct Video File (.mp4, .webm, .mov)
-                else if (url.match(/\.(mp4|webm|mov|ogg)$/i) || item.cat === "Self-Hosted") {
-                    mediaHtml = `<video src="${url}" controls class="w-full h-full object-cover"></video>`;
-                } 
-                // 3. Image Falling back
-                else {
+                    const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+                    mediaHtml = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0" class="w-full h-full pointer-events-none" frameborder="0" allowfullscreen></iframe>`;
+                } else if (url.match(/\.(mp4|webm|mov)$/i)) {
+                    mediaHtml = `<video src="${url}" class="w-full h-full object-cover"></video>`;
+                } else {
                     mediaHtml = `<img src="${url}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x250/111/333?text=Media+Not+Found'">`;
                 }
 
                 return `
-                    <div class="glass p-5 rounded-2xl flex flex-col h-full">
-                        <div class="mb-4 aspect-video overflow-hidden rounded-lg bg-black flex items-center justify-center">
+                    <div class="glass p-5 rounded-2xl flex flex-col cursor-pointer" onclick="openTheater('${url}', '${item.name}', '${item.desc}', '${item.cat}')">
+                        <div class="video-container mb-4">
                             ${mediaHtml}
+                            <div class="absolute inset-0 bg-transparent z-10"></div>
                         </div>
-                        <div class="flex-grow">
-                            <span class="text-[10px] uppercase tracking-widest text-red-500 font-bold">${item.cat}</span>
-                            <h3 class="text-xl font-bold mt-1">${item.name}</h3>
-                            <p class="text-zinc-400 text-sm mt-2 leading-relaxed italic">"${item.desc}"</p>
-                        </div>
+                        <h3 class="text-xl font-bold mt-1">${item.name}</h3>
+                        <p class="text-red-500 text-[10px] uppercase font-bold tracking-widest mt-1">${item.cat}</p>
+                        <p class="text-zinc-400 text-sm mt-3 italic">"${item.desc}"</p>
                     </div>
                 `;
             }).join('');
         }
 
-        function generateNewEntry() {
-            const name = document.getElementById('admin-name').value;
-            const cat = document.getElementById('admin-cat').value;
-            const desc = document.getElementById('admin-desc').value;
-            const fileInput = document.getElementById('admin-file');
-            let url = document.getElementById('admin-url').value;
+        // --- 3. FILTER LOGIC ---
+        function filterGallery(category) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText === category || (category === 'All' && btn.innerText === 'ALL')) btn.classList.add('active');
+            });
+            // Re-render
+            renderGallery(category);
+        }
 
-            // Use filename if a local file was picked
-            if (fileInput.files.length > 0) {
-                url = fileInput.files[0].name;
+        // --- 4. THEATER MODE ---
+        function openTheater(url, name, desc, cat) {
+            const modal = document.createElement('div');
+            modal.className = "fixed inset-0 bg-black/98 z-50 flex items-center justify-center p-4 md:p-10";
+            modal.onclick = () => modal.remove();
+
+            let content = '';
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+                content = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" class="w-full max-w-5xl aspect-video shadow-2xl" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+            } else {
+                content = `<video src="${url}" controls autoplay class="max-w-full max-h-[80vh] shadow-2xl"></video>`;
             }
 
+            modal.innerHTML = `
+                <div class="w-full flex flex-col items-center">
+                    ${content}
+                    <h2 class="text-3xl font-bold mt-8 text-white">${name}</h2>
+                    <p class="text-red-500 uppercase tracking-widest text-xs font-bold mt-1">${cat}</p>
+                    <p class="text-zinc-400 mt-4 max-w-xl text-center italic">"${desc}"</p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function generateNewEntry() {
+            const name = document.getElementById('admin-name').value;
+            const url = document.getElementById('admin-url').value;
+            const cat = document.getElementById('admin-cat').value;
+            const desc = document.getElementById('admin-desc').value;
             const entryCode = `{ name: "${name}", url: "${url}", cat: "${cat}", desc: "${desc}" },`;
-            
             document.getElementById('code-output').innerText = entryCode;
             document.getElementById('output-area').classList.remove('hidden');
         }
 
-        renderGallery();
-    </script>
-
+        // Initial Load
         renderGallery();
     </script>
 </body>
