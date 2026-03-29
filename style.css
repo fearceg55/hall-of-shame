@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syncopate:wght@700&display=swap');
+
+:root {
+    --bg: #08080a;
+    --accent: #00f2ff;
+    --accent-dim: rgba(0, 242, 255, 0.15);
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --text: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg); /* Back to solid near-black */
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    /* Removed the scanline gradients that were causing the white lines */
+}
+
+/* NAVIGATION */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 5%;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.logo { font-family: 'Syncopate', sans-serif; font-weight: 700; letter-spacing: 5px; font-size: 1.2rem;}
+.logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+
+.status-box {
+    border: 1px solid var(--accent);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-decoration: none;
+    background: var(--accent-dim);
+    box-shadow: 0 0 15px var(--accent-dim);
+    display: flex;
+    align-items: center;
+}
+
+.pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-right: 10px; animation: blink 1.5s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* HERO (FOR INDEX PAGE) */
+.hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero h1 { font-family: 'Syncopate', sans-serif; font-size: clamp(2rem, 8vw, 4.5rem); letter-spacing: -2px; margin-bottom: 10px; }
+.hero p { color: rgba(255,255,255,0.5); letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; }
+
+.cta {
+    margin-top: 40px;
+    padding: 15px 40px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 3px;
+    transition: 0.3s;
+    background: transparent;
+}
+
+.cta:hover { background: var(--accent); color: #000; box-shadow: 0 0 30px var(--accent); }
+
+/* VAULT SECTIONS (FOR ARCHIVE PAGE) */
+.vault-content { padding: 60px 5%; }
+.vault-section { margin-bottom: 60px; }
+
+.vault-id { color: var(--accent); font-size: 0.6rem; letter-spacing: 4px; opacity: 0.6; display: block; margin-bottom: 5px; }
+h2 { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; margin-bottom: 25px; border-left: 3px solid var(--accent); padding-left: 15px; }
+
+.horizontal-scroll {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    padding-bottom: 25px;
+    scroll-behavior: smooth;
+}
+
+.horizontal-scroll::-webkit-scrollbar { height: 4px; }
+.horizontal-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+.media-card, .img-placeholder {
+    min-width: 380px;
+    height: 240px;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s ease;
+    position: relative;
+    border-radius: 4px;
+}
+
+.media-card:hover { border-color: var(--accent); background: rgba(0, 242, 255, 0.05); transform: scale(1.02); }
+
+.card-label { font-size: 0.7rem; color: var(--accent); border: 1px solid var(--accent); padding: 3px 8px; margin-bottom: 15px; }
+
+/* FOOTER */
+footer { padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; margin-top: auto; }
+.social-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
+.social-links a { color: #fff; font-size: 1.8rem; transition: 0.3s; }
+.social-links a:hover { color: var(--accent); transform: translateY(-5px); text-shadow: 0 0 15px var(--accent); }
+.copyright { font-size: 0.6rem; opacity: 0.3; letter-spacing: 3px; }
+.back-btn { text-decoration: none; color: #fff; border: 1px solid #fff; padding: 5px 15px; font-size: 0.7rem; }
