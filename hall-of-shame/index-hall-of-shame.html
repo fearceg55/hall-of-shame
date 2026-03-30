@@ -56,9 +56,8 @@
     <script>
         // --- 1. YOUR DATA ---
         const shameData = [
-            { name: "info slip", url: "https://youtu.be/OiThl8E99TA", cat: "cursed", desc: "idk why he said that" },
-            { name: "ragebait 101", url: "vids/ragebait101.mp4", cat: "Cursed", desc: "rage, rage, rage, it consumes us all; especially turtle." }
-            
+            { name: "info slip", url: "https://youtu.be/OiThl8E99TA", cat: "Cursed", desc: "idk why he said that" },
+            { name: "ragebait 101", url: "vids/ragebait101.mp4", cat: "Cursed", desc: "rage, rage, rage, it consumes us all." }
         ];
 
         // --- 2. RENDER LOGIC ---
@@ -73,9 +72,10 @@
                 if (url.includes('youtube.com') || url.includes('youtu.be')) {
                     const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
                     mediaHtml = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0" class="w-full h-full pointer-events-none" frameborder="0" allowfullscreen></iframe>`;
-                } else if (url.match(/\.(mp4|webm|mov)$/i)) {
-                    mediaHtml = `<video src="${url}" class="w-full h-full object-cover"></video>`;
-                } else {
+                } } else if (url.match(/\.(mp4|webm|mov)$/i)) {
+    // Added autoplay, muted, and loop so it shows up in the gallery
+    mediaHtml = `<video src="${url}" autoplay muted loop class="w-full h-full object-cover"></video>`;
+} else {
                     mediaHtml = `<img src="${url}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x250/111/333?text=Media+Not+Found'">`;
                 }
 
