@@ -123,7 +123,7 @@ h2 { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; margin-bottom: 25p
     background-position: center;
     opacity: 0.4;                /* Makes image dim so text is readable */
     transition: 0.4s ease;
-    z-index: 1;                  /* Puts image behind text */
+    z-index: -1;                  /* Puts image behind text */
 }
 
 /* Ensure text stays on top and is readable */
